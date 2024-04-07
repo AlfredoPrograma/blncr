@@ -1,20 +1,26 @@
 package main
 
 import (
-	"net"
+	"fmt"
 	"net/http"
 )
 
 func main() {
-	l, err := net.Listen("tcp4", ":9090")
+	config, err := readConfig()
 
 	if err != nil {
-		panic(err)
+		logFatal(err.Error())
 	}
 
+	if err != nil {
+		logFatal(err.Error())
+	}
+
+	// Handling request and forwarding to servers
 	http.HandleFunc("/*", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello world"))
 	})
 
-	http.Serve(l, nil)
+	logInfo(fmt.Sprintf("Load balancer running at port %v", config.Port))
+	http.ListenAndServe(fmt.Sprintf(":%v", config.Port), nil)
 }

@@ -1,0 +1,9 @@
+# Exposed port for load balancer 
+port = 9090
+
+# List of servers where requests will be forwarded 
+servers = [
+  { host = "127.0.0.1", port = 9091 },
+  { host = "127.0.0.1", port = 9092 },
+  { host = "127.0.0.1", port = 9093 },
+]
