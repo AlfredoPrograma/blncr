@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	"net"
 )
 
 func main() {
@@ -16,11 +16,20 @@ func main() {
 		logFatal(err.Error())
 	}
 
-	// Handling request and forwarding to servers
-	http.HandleFunc("/*", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world"))
-	})
+	// Start listening requests via TCP
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%v", config.Port))
 
-	logInfo(fmt.Sprintf("Load balancer running at port %v", config.Port))
-	http.ListenAndServe(fmt.Sprintf(":%v", config.Port), nil)
+	if err != nil {
+		logFatal(err.Error())
+	}
+
+	for {
+		conn, err := listener.Accept()
+
+		if err != nil {
+			logWarn(fmt.Sprintf("Cannot handle incoming connection %s", conn.RemoteAddr()))
+		}
+
+		logInfo(fmt.Sprintf("Handling connection %s", conn.RemoteAddr()))
+	}
 }
