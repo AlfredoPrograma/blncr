@@ -30,6 +30,6 @@ func main() {
 			logWarn(fmt.Sprintf("Cannot handle incoming connection %s", conn.RemoteAddr()))
 		}
 
-		logInfo(fmt.Sprintf("Handling connection %s", conn.RemoteAddr()))
+		go handleConnection(conn)
 	}
 }

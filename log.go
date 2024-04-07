@@ -13,3 +13,7 @@ func logWarn(msg string) {
 func logFatal(msg string) {
 	log.Fatalf("[FATAL] %s", msg)
 }
+
+func logDebug(msg string) {
+	log.Printf("[DEBUG] %s", msg)
+}
