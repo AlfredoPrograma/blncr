@@ -23,6 +23,8 @@ func main() {
 		logFatal(err.Error())
 	}
 
+	balancer := NewBalancer(config.Servers)
+
 	for {
 		conn, err := listener.Accept()
 
@@ -30,6 +32,6 @@ func main() {
 			logWarn(fmt.Sprintf("Cannot handle incoming connection %s", conn.RemoteAddr()))
 		}
 
-		go handleConnection(conn)
+		go handleConnection(conn, balancer)
 	}
 }

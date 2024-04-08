@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func handleConnection(conn net.Conn) {
+func handleConnection(conn net.Conn, balancer *Balancer) {
 	connReader := bufio.NewReader(conn)
 	req, err := http.ReadRequest(connReader)
 
@@ -15,5 +15,6 @@ func handleConnection(conn net.Conn) {
 		logWarn(err.Error())
 	}
 
-	logDebug(fmt.Sprintf("%#v", req))
+	logDebug(fmt.Sprintf("Request: %#v", req))
+	logDebug(fmt.Sprintf("Server: %v", balancer.getServer()))
 }
